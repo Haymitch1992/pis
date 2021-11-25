@@ -5,15 +5,32 @@ import stationInfo from './station-info.vue';
 // 需要请求车辆的信息
 // 监听websocket 状态 切换为应急显示
 import axios from 'axios';
-const line = reactive({
-  up: { line_info: [] },
-  down: { line_info: [] },
+
+const props = defineProps({
+  direction: Number,
+  station: Number,
 });
-const lineInfo = computed(() => {
-  if (line.up === null) {
-    return [];
-  } else {
-    return line.up.line_info;
+const line = reactive({
+  up: { line_info: [{ cn_name: '', en_name: '' }] },
+  down: { line_info: [{ cn_name: '', en_name: '' }] },
+});
+// 默认当前为上行 多少那个站
+const websocketInfo = reactive({
+  arrivalTime: 4,
+  tranInfo: [
+    { crowding_degree: 1, temperature: '24.5℃', congestion: 1 },
+    { crowding_degree: 2, temperature: '25.5℃', congestion: 2 },
+  ],
+});
+const getTrainInfo = () => {
+  console.log(123);
+};
+const lineInfo: any = computed(() => {
+  switch (props.direction) {
+    case 1:
+      return line.up.line_info;
+    case 2:
+      return line.down.line_info;
   }
 });
 
@@ -42,8 +59,10 @@ axios
           <P class="pis-text-p">To</P>
         </span>
         <span class="current pis-text-line">
-          <p>金顶街</p>
-          <P class="pis-text-p">JINDINGJIE</P>
+          <p>{{ lineInfo[lineInfo.length - 1].cn_name || '' }}</p>
+          <P class="pis-text-p">{{
+            lineInfo[lineInfo.length - 1].en_name || ''
+          }}</P>
         </span>
         <span class="text-left">方向</span>
       </span>
@@ -54,9 +73,14 @@ axios
     </div>
     <div class="pis-body">
       <!-- 线路信息 -->
-      <stationInfo class="pis-line" :line="lineInfo"></stationInfo>
+      <stationInfo
+        class="pis-line"
+        :line="lineInfo"
+        :currentStation="props.station"
+        :arrivalTime="websocketInfo.arrivalTime"
+      ></stationInfo>
       <!-- 车辆状态 -->
-      <train></train>
+      <train :tranInfo="websocketInfo.tranInfo"></train>
     </div>
   </div>
 </template>

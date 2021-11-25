@@ -2,6 +2,8 @@
 import { reactive, ref } from 'vue';
 const props = defineProps({
   line: Array,
+  currentStation: Number,
+  arrivalTime: Number,
 });
 </script>
 
@@ -12,10 +14,16 @@ const props = defineProps({
       v-for="item: any in props.line"
       :key="item.en_name"
     >
-      <span class="pis-line-item" :title="item.station_id">
-        <p>{{ item.cn_name }}</p>
+      <span
+        class="pis-line-item"
+        :title="item.station_id"
+        :class="item.station_id == props.currentStation ? 'active' : ''"
+      >
+        <p class="cn">{{ item.cn_name }}</p>
         <p class="en">{{ item.en_name }}</p>
-        <p class="daozhan">预计到站2分钟</p>
+        <p class="daozhan" v-if="item.station_id === props.currentStation">
+          预计到站{{ props.arrivalTime }}分钟
+        </p>
       </span>
       <img src="../assets/next-2.png" alt="" />
     </span>
@@ -48,8 +56,11 @@ const props = defineProps({
     width: 80px;
   }
 }
+
 .pis-line-item {
   position: relative;
+  color: #a1a1a0;
+
   .daozhan {
     font-size: 18px;
     background: #0d3d62;
@@ -74,6 +85,15 @@ const props = defineProps({
     border-right: 10px solid transparent;
     border-top: 20px solid #0d3d62;
     z-index: 1;
+  }
+}
+.pis-line-item.active {
+  color: #fff;
+  .cn {
+    font-size: 60px;
+  }
+  .en {
+    font-size: 40px;
   }
 }
 .pis-line-item.active .daozhan {

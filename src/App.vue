@@ -13,6 +13,8 @@ const data = reactive({
   lockReconnect: false, // 连接失败不进行重连
   maxReconnect: 5, // 最大重连次数，若连接失败
   socket: null as any,
+  direction: 1,
+  station: 11003,
 });
 
 function reconnect() {
@@ -116,7 +118,11 @@ onMounted(() => {
 
 <template>
   <div class="pis-container">
-    <pis v-if="pageStatus === 1"></pis>
+    <pis
+      v-if="pageStatus === 1"
+      :direction="data.direction"
+      :station="data.station"
+    ></pis>
     <danger-view
       v-if="pageStatus === 4"
       :dangerText="dangerText"
