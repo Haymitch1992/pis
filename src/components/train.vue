@@ -52,7 +52,8 @@ const porps = defineProps({
   padding-bottom: 10px;
   position: relative;
   width: 500px;
-  display: inline-block;
+  display: block;
+  margin: 0 auto;
   .car-container {
     width: 500px;
     height: 44px;
@@ -62,7 +63,7 @@ const porps = defineProps({
     border: 1px solid #fff;
     box-sizing: border-box;
     background: linear-gradient(to right, #01be00, #01be00);
-    margin-left: 60px;
+    // margin-left: 60px;
     // 红色 #c40001
     position: relative;
     top: 20px;

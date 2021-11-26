@@ -36,8 +36,9 @@ const props = defineProps({
   width: 100%;
   font-size: 50px;
   padding-bottom: 20px;
-  display: inline-block;
+  display: block;
   width: 1200px;
+  margin: 0 auto;
   i {
     font-style: normal;
   }

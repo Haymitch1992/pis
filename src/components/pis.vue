@@ -2,10 +2,13 @@
 import { reactive, ref, computed } from 'vue';
 import train from './train.vue';
 import stationInfo from './station-info.vue';
+import 'animate.css';
+
 // 需要请求车辆的信息
 // 监听websocket 状态 切换为应急显示
 import axios from 'axios';
-
+import Process from './process.vue';
+const showPis = ref(false);
 const props = defineProps({
   direction: Number,
   station: Number,
@@ -22,9 +25,7 @@ const websocketInfo = reactive({
     { crowding_degree: 2, temperature: '25.5℃', congestion: 2 },
   ],
 });
-const getTrainInfo = () => {
-  console.log(123);
-};
+
 const lineInfo: any = computed(() => {
   switch (props.direction) {
     case 1:
@@ -67,7 +68,7 @@ axios
         <span class="text-left">方向</span>
       </span>
       <span class="manche">
-        <p class="cn">普通车</p>
+        <p class="cn" @click="showPis = !showPis">普通车</p>
         <p>Local</p>
       </span>
     </div>
@@ -80,7 +81,12 @@ axios
         :arrivalTime="websocketInfo.arrivalTime"
       ></stationInfo>
       <!-- 车辆状态 -->
-      <train :tranInfo="websocketInfo.tranInfo"></train>
+      <train
+        v-show="showPis"
+        :tranInfo="websocketInfo.tranInfo"
+        class="animate__animated animate__fadeInLeft"
+      ></train>
+      <Process v-show="!showPis"></Process>
     </div>
   </div>
 </template>
